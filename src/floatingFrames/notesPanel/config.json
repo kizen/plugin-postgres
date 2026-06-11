@@ -1,0 +1,15 @@
+{
+  "name": "Notes Panel",
+  "title": "Scratch Pad",
+  "api_name": "notes_panel",
+  "header_color": "#4f46e5",
+  "header_text_color": "white",
+  "minimized_style": "circle",
+  "minimized_config": {
+    "color": "#4f46e5",
+    "customIconFile": "trigger.svg"
+  },
+  "height": 460,
+  "width": 340,
+  "when": "{{config.enableQuickNote}}"
+}

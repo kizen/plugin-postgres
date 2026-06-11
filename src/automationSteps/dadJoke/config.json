@@ -1,0 +1,22 @@
+{
+  "name": "Dad Joke",
+  "action_description": "Makes a Dad Joke API call and returns a joke",
+  "plugin_description": "Makes a dad joke",
+  "action_type": "dad_joke",
+  "runtime": "python 3.12",
+  "inputs": [],
+  "outputs": [
+    {
+      "name": "target",
+      "label": "Target",
+      "data_type": "string",
+      "required": true,
+      "input_source": "object_field",
+      "hint_field_name": "target",
+      "hint_related_object_field_name": null,
+      "script_alias": "target",
+      "conflict_resolution": "overwrite",
+      "create_field_options": false
+    }
+  ]
+}

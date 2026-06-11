@@ -1,0 +1,7 @@
+{
+  "name": "Notes",
+  "api_name": "notes",
+  "is_toolbar_item": true,
+  "toolbar_icon": "notebook",
+  "toolbar_color": "#4f46e5"
+}

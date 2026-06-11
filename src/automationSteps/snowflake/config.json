@@ -1,0 +1,22 @@
+{
+  "name": "Snowflake",
+  "action_description": "Connects to Snowflake and executes a query",
+  "plugin_description": "Snowflake connector",
+  "action_type": "snowflake_query",
+  "runtime": "python 3.12",
+  "inputs": [],
+  "outputs": [
+    {
+      "name": "target",
+      "label": "Target",
+      "data_type": "string",
+      "required": true,
+      "input_source": "object_field",
+      "hint_field_name": "target",
+      "hint_related_object_field_name": null,
+      "script_alias": "target",
+      "conflict_resolution": "overwrite",
+      "create_field_options": false
+    }
+  ]
+}

@@ -1,0 +1,117 @@
+{
+  "name": "Scott F's Dev Plugin",
+  "version": "1.0.17",
+  "published": true,
+  "release_branch": ["main"],
+  "api_name": "scott_f_dev",
+  "external_link": "",
+  "description": "Development plugin for Scott F — sample toolbar items, views, modals, and setup assistant fields.",
+  "entry": "src/",
+  "engine": "1.0.0",
+  "release_notes_directory": "releaseNotes/",
+  "release_environments": ["staging"],
+  "config_template": {},
+  "base_config": {
+    "secrets": ["webhook_url"]
+  },
+  "developer_business_id": {"staging": "0fbf2bd5-f7c4-4bb1-a354-6d3d79120a41"},
+  "setup_assistant": {
+    "fields": [
+      {
+        "type": "description",
+        "key": "introDescription",
+        "content": "<h3>Welcome to Scott F's Dev Plugin</h3><p>This sample plugin lets your team capture quick notes from the toolbar and review them in one place. Configure the options below to control how it behaves.</p>"
+      },
+      {
+        "type": "boolean",
+        "label": "Show Welcome Banner",
+        "key": "showWelcomeBanner",
+        "default": true,
+        "tooltip": "Display the greeting banner at the top of the Notes view."
+      },
+      {
+        "type": "boolean",
+        "label": "Enable Quick Note",
+        "key": "enableQuickNote",
+        "default": true,
+        "tooltip": "Allow capturing quick notes from the toolbar."
+      },
+      {
+        "type": "description",
+        "key": "notesStorageDescription",
+        "content": "<h4>Notes Storage (optional)</h4><p>Pick a Kizen object and map the title/body fields to permanently store quick notes as records. Leave blank to keep notes for the current session only.</p>"
+      },
+      {
+        "type": "custom_object",
+        "label": "Notes Object",
+        "key": "notesObjectId",
+        "required": false,
+        "match_hint": "logged_notes",
+        "tooltip": "The Kizen custom object where quick notes will be stored as records."
+      },
+      {
+        "type": "container",
+        "columns": 2,
+        "label": "Note Field Mapping",
+        "key": "noteFieldMapping",
+        "when": "{{notesObjectId}} != null",
+        "fields": [
+          {
+            "type": "field",
+            "label": "Note Title Field",
+            "key": "noteTitleField",
+            "required": false,
+            "match_hint": "title",
+            "object_id": "{{notesObjectId}}",
+            "tooltip": "Field that stores each note's title. Defaults to the object's primary (name) field if left blank."
+          },
+          {
+            "type": "field",
+            "label": "Note Body Field",
+            "key": "noteBodyField",
+            "required": false,
+            "match_hint": "body",
+            "object_id": "{{notesObjectId}}",
+            "tooltip": "Field that stores each note's details/body."
+          },
+          {
+            "type": "field",
+            "label": "Note Type Field",
+            "key": "noteCategoryField",
+            "required": false,
+            "match_hint": "category",
+            "object_id": "{{notesObjectId}}",
+            "tooltip": "Field that stores the note type (Task, Idea, or Reminder)."
+          },
+          {
+            "type": "field",
+            "label": "Urgent Field",
+            "key": "noteUrgentField",
+            "required": false,
+            "match_hint": "urgent",
+            "object_id": "{{notesObjectId}}",
+            "tooltip": "Yes/No field that stores whether the note is marked urgent."
+          }
+        ]
+      }
+    ]
+  },
+  "services": [
+    {
+      "service_name": "snowflake_staging_api",
+      "display_name": "Snowflake Staging API",
+      "required_entitlement": "",
+      "auth_type": "oauth",
+      "auth_level": "business",
+      "base_service_url": "https://yhjtexo-kv44817.snowflakecomputing.com",
+      "auth_credentials": {
+        "client_id": "e14Exc8FnOCLhYMTSqXiRq139tI=",
+        "client_secret": "s6PaUcWDxajbsIRcVyIWs2s38YlEMT6iP1mR4/ra6+M=",
+        "scopes": "SESSION:ROLE:SYSADMIN",
+        "authorize_url": "https://yhjtexo-kv44817.snowflakecomputing.com/oauth/authorize",
+        "token_url": "https://yhjtexo-kv44817.snowflakecomputing.com/oauth/token-request",
+        "token_field_name": "access_token",
+        "content_type": "application/x-www-form-urlencoded"
+    }
+  }]
+}
