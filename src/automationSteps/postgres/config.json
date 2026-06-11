@@ -1,8 +1,8 @@
 {
-  "name": "Snowflake",
-  "action_description": "Connects to Snowflake and executes a query",
-  "plugin_description": "Snowflake connector",
-  "action_type": "snowflake_query",
+  "name": "Postgres",
+  "action_description": "Connects to Postgres and executes a query",
+  "plugin_description": "Postgres connector",
+  "action_type": "postgres_query",
   "runtime": "python 3.12",
   "inputs": [],
   "outputs": [
