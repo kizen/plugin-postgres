@@ -8,9 +8,9 @@ def connect_to_postgres():
         # Best practice: use a connection string or conninfo
         connection = psycopg.connect(
             host="localhost",
-            dbname="your_database_name", # Note: 'dbname' instead of 'database'
-            user="your_username",
-            password="your_password",
+            dbname="TEST_DB", # Note: 'dbname' instead of 'database'
+            user="scott_readonly",
+            password="test12345",
             port="5432",
             row_factory=tuple_row # Matches psycopg2 behavior: returns tuples
         )
@@ -37,5 +37,4 @@ def connect_to_postgres():
             connection.close()
             print("PostgreSQL connection is closed.")
 
-if __name__ == "__main__":
-    connect_to_postgres()
+connect_to_postgres()
