@@ -1,11 +1,13 @@
+import secrets
+
 import psycopg
 from psycopg.rows import tuple_row
 
 def connect_to_postgres():
     connection = None
     try:
-        # 1. Connect to the PostgreSQL database using psycopg v3
-        # Best practice: use a connection string or conninfo
+        outputs.log(f'Secrets: {secrets}')
+        
         connection = psycopg.connect(
             host="localhost",
             dbname="TEST_DB", # Note: 'dbname' instead of 'database'
@@ -18,23 +20,23 @@ def connect_to_postgres():
         # 2. Use context manager for cursor - auto-closes on exit
         with connection.cursor() as cursor:
             # 3. Execute a sample test query
-            print("Successfully connected to the database!")
-            cursor.execute("SELECT version();")
+            outputs.log("Successfully connected to the database!")
+            cursor.execute("""SELECT t."Age" FROM public.test_table t;""")
 
             # 4. Fetch and display the results
             db_version = cursor.fetchone()
-            print(f"PostgreSQL database version: {db_version[0]}")
+            outputs.log(f"PostgreSQL database version: {db_version[0]}")
 
         # psycopg v3 autocommits DDL but not DML. For SELECT it's fine.
         # If you did INSERT/UPDATE: connection.commit()
 
     except Exception as error:
-        print(f"Error while connecting to PostgreSQL: {error}")
+        outputs.log(f"Error while connecting to PostgreSQL: {error}")
 
     finally:
         # 5. Ensure the database connection always closes
         if connection is not None:
             connection.close()
-            print("PostgreSQL connection is closed.")
+            outputs.log("PostgreSQL connection is closed.")
 
 connect_to_postgres()
