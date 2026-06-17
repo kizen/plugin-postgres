@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "published": true,
   "release_branch": ["main"],
-  "api_name": "scott_f_dev",
+  "api_name": "plugin_postgres",
   "external_link": "",
   "description": "Development plugin for Postgres http data pulling",
   "entry": "src/",
@@ -12,7 +12,7 @@
   "release_environments": ["staging"],
   "config_template": {},
   "base_config": {
-    "secrets": ["webhook_url"]
+    "secrets": ["postgres_host", "postgres_port", "postgres_password"]
   },
   "developer_business_id": {"staging": "0fbf2bd5-f7c4-4bb1-a354-6d3d79120a41"},
   "setup_assistant": {
