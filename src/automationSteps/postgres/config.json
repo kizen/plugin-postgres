@@ -1,5 +1,5 @@
 {
-  "name": "postgres",
+  "name": "Run Query",
   "action_description": "Connects to Postgres and executes a query",
   "plugin_description": "Postgres connector",
   "action_type": "postgres_query",
