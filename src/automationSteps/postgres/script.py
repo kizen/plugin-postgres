@@ -33,25 +33,32 @@ def connect_to_postgres():
             row_factory=tuple_row # Matches psycopg2 behavior: returns tuples
         )
 
-        # 2. Use context manager for cursor - auto-closes on exit
         with connection.cursor() as cursor:
-            # 3. Execute a sample test query
             outputs.log("Successfully connected to the database!")
             cursor.execute(INPUT_QUERY)
 
-            # 4. Fetch and display the results
-            query_result = cursor.fetchone()
-            outputs.log(f"PostgreSQL query result: {query_result[0]}")
-            outputs.result = str(query_result[0])  # Store result as string for output
+            # Fetch all rows
+            all_rows = cursor.fetchall()
 
-        # psycopg v3 autocommits DDL but not DML. For SELECT it's fine.
-        # If you did INSERT/UPDATE: connection.commit()
+            if not all_rows:
+                outputs.log("Query returned no results")
+                outputs.result = "No results"
+                return
+
+            # Check if it's exactly 1 row with 1 column
+            if len(all_rows) == 1 and len(all_rows[0]) == 1:
+                single_value = all_rows[0][0]
+                outputs.log(f"Single value result: {single_value}")
+                outputs.result = str(single_value)
+            else:
+                # Multiple values - return entire dataset as string
+                outputs.log(f"Multiple values/rows returned: {len(all_rows)} rows")
+                outputs.result = str(all_rows)
 
     except Exception as error:
         outputs.log(f"Error while connecting to PostgreSQL: {error}")
 
     finally:
-        # 5. Ensure the database connection always closes
         if connection is not None:
             connection.close()
             outputs.log("PostgreSQL connection is closed.")
