@@ -42,7 +42,7 @@ def connect_to_postgres():
 
             if not all_rows:
                 outputs.log("Query returned no results")
-                outputs.result = "No results"
+                outputs.result = ""
                 return
 
             # Check if it's exactly 1 row with 1 column
