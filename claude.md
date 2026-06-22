@@ -194,7 +194,6 @@ Hydrate: scheduled SELECT * sync to Kizen tables
 
 12. Related Links
 Internal Doc: KZN-17384
-Lucidchart: [Postgres Plugin Sequence Diagram]
 Driver Docs: https://www.psycopg.org/psycopg3/docs/
 Container Ticket: KZN-17367
 MySQL Plugin: KZN-17385 for behavior parity reference
