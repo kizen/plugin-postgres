@@ -183,8 +183,6 @@ No pagination: User writes LIMIT/OFFSET manually.
 
 10. Observability
 Logs: outputs.log() used for connection success, row count, errors, close. Visible in workflow run logs.
-Notify Plugin Developer: Toggle in step config routes errors to plugin owner Slack.
-Metrics to add: query_duration_ms, row_count, error_type
 
 11. Future Work
 Pass sslmode and sslrootcert from connection config
