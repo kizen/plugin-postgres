@@ -20,7 +20,7 @@ inputs.query | str | SQL query string to execute
 outputs | object | Has .log() method and .result attribute for output
 
 ### Secrets JSON Format
-The postgres_connection secret must be JSON with environment keys. Curly quotes are auto-converted to straight quotes.
+The postgres_connection secret must be JSON with environment keys. Curly quotes are auto-converted to straight quotes. Always include production_db as it's the default fallback.
 
 {
   "production_db": {
