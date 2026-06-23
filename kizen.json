@@ -12,7 +12,7 @@
   "release_environments": ["staging"],
   "config_template": {},
   "base_config": {
-    "secrets": ["postgres_host", "postgres_port", "postgres_password"]
+    "secrets": ["postgres_connection"]
   },
   "developer_business_id": {"staging": "0fbf2bd5-f7c4-4bb1-a354-6d3d79120a41"},
   "setup_assistant": {

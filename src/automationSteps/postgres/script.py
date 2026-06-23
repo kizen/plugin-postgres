@@ -1,22 +1,36 @@
+import json
 import psycopg
 from psycopg.rows import tuple_row
 
 def connect_to_postgres():
     connection = None
     try:
+        secret_connection = next(iter(key for key in secrets if key.endswith("postgres_connection")), None)
+        POSTGRES_CONNECTION_RAW = secrets[secret_connection]
+        outputs.log(f"POSTGRES_CONNECTION raw: {POSTGRES_CONNECTION_RAW}")
+
+        # Replace curly quotes with straight quotes
+        cleaned_json = POSTGRES_CONNECTION_RAW.replace('“', '"').replace('”', '"')
+        POSTGRES_CONNECTION = json.loads(cleaned_json)
+
+        # Now actually use it - pick which env you want
+        env = inputs.connection_secret_tag if inputs.connection_secret_tag in POSTGRES_CONNECTION else 'production_db'
+        conn_data = POSTGRES_CONNECTION[env]
+
+        POSTGRES_HOST = conn_data['host']
+        POSTGRES_PORT = conn_data['port']
+        POSTGRES_PASSWORD = conn_data['password']
+        POSTGRES_USER = conn_data['user_name']
+
+    except json.JSONDecodeError as e:
+        outputs.log(f"Error decoding JSON from connection_secret_tag: {e}")
+        return None
+    except KeyError as e:
+        outputs.log(f"Missing key in connection JSON: {e}")
+        return None
+
+    try:
         outputs.log(f'Secrets: {secrets}')
-
-        secret_password = next(iter(key for key in secrets if key.endswith("postgres_password")), None)
-        POSTGRES_PASSWORD = secrets[secret_password]
-
-        secret_port = next(iter(key for key in secrets if key.endswith("postgres_port")), None)
-        POSTGRES_PORT = secrets[secret_port]
-
-        secret_host = next(iter(key for key in secrets if key.endswith("postgres_host")), None)
-        POSTGRES_HOST = secrets[secret_host]
-
-        INPUT_USER = inputs.user
-        outputs.log(f"Input user: {INPUT_USER}")
 
         INPUT_DATABASE = inputs.database
         outputs.log(f"Input database: {INPUT_DATABASE}")
@@ -27,7 +41,7 @@ def connect_to_postgres():
         connection = psycopg.connect(
             host=POSTGRES_HOST,
             dbname=INPUT_DATABASE,
-            user=INPUT_USER,
+            user=POSTGRES_USER,
             password=POSTGRES_PASSWORD,
             port=POSTGRES_PORT,
             row_factory=tuple_row # Matches psycopg2 behavior: returns tuples
