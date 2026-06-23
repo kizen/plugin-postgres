@@ -13,7 +13,7 @@ def connect_to_postgres():
         cleaned_json = POSTGRES_CONNECTION_RAW.replace('“', '"').replace('”', '"')
         POSTGRES_CONNECTION = json.loads(cleaned_json)
 
-        # Now actually use it - pick which env you want
+        # Pick which env you want
         env = inputs.connection_secret_tag if inputs.connection_secret_tag in POSTGRES_CONNECTION else 'production_db'
         conn_data = POSTGRES_CONNECTION[env]
 
@@ -44,7 +44,7 @@ def connect_to_postgres():
             user=POSTGRES_USER,
             password=POSTGRES_PASSWORD,
             port=POSTGRES_PORT,
-            row_factory=tuple_row # Matches psycopg2 behavior: returns tuples
+            row_factory=tuple_row
         )
 
         with connection.cursor() as cursor:
