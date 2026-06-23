@@ -1,6 +1,6 @@
 import json
 import psycopg
-from psycopg.rows import tuple_row
+from psycopg.rows import tuple_row, dict_row
 
 def connect_to_postgres():
     connection = None
@@ -47,7 +47,7 @@ def connect_to_postgres():
             user=POSTGRES_USER,
             password=POSTGRES_PASSWORD,
             port=POSTGRES_PORT,
-            row_factory=tuple_row
+            row_factory=dict_row
         )
 
         with connection.cursor() as cursor:
