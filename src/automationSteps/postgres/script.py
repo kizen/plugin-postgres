@@ -4,6 +4,9 @@ from psycopg.rows import tuple_row
 
 def connect_to_postgres():
     connection = None
+
+    outputs.log(f'result_format: {inputs.return_single_value}')
+
     try:
         secret_connection = next(iter(key for key in secrets if key.endswith("postgres_connection")), None)
         POSTGRES_CONNECTION_RAW = secrets[secret_connection]
@@ -60,10 +63,13 @@ def connect_to_postgres():
                 return
 
             # Check if it's exactly 1 row with 1 column
-            if len(all_rows) == 1 and len(all_rows[0]) == 1:
-                single_value = all_rows[0][0]
-                outputs.log(f"Single value result: {single_value}")
-                outputs.result = str(single_value)
+            if inputs.return_single_value:
+                if len(all_rows) == 1 and len(all_rows[0]) == 1:
+                    single_value = all_rows[0][0]
+                    outputs.log(f"Single value result: {single_value}")
+                    outputs.result = str(single_value)
+                else:
+                    raise ValueError("Expected a single value result, but the query returned multiple rows or columns.")
             else:
                 # Multiple values - return entire dataset as string
                 outputs.log(f"Multiple values/rows returned: {len(all_rows)} rows")
@@ -71,6 +77,7 @@ def connect_to_postgres():
 
     except Exception as error:
         outputs.log(f"Error while connecting to PostgreSQL: {error}")
+        raise ValueError(f"Error while using PostgreSQL Plugin: {error}")
 
     finally:
         if connection is not None:

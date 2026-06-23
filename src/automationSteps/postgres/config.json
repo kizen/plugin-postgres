@@ -20,6 +20,14 @@
       "script_alias": "query"
     },
     {
+      "name": "return_single_value",
+      "label": "Return Single Value",
+      "data_type": "boolean",
+      "required": true,
+      "script_alias": "result_single_value",
+      "default": true
+    },
+    {
       "name": "connection_secret_tag",
       "label": "Connection Secret Tag",
       "data_type": "string",
