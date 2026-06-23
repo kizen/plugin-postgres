@@ -33,8 +33,6 @@ def connect_to_postgres():
         return None
 
     try:
-        outputs.log(f'Secrets: {secrets}')
-
         INPUT_DATABASE = inputs.database
         outputs.log(f"Input database: {INPUT_DATABASE}")
 
