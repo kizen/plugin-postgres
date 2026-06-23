@@ -22,6 +22,7 @@ outputs | object | Has .log() method and .result attribute for output
 ### Secrets JSON Format
 The postgres_connection secret must be JSON with environment keys. Curly quotes are auto-converted to straight quotes. Always include production_db as it's the default fallback.
 
+```json
 {
   "production_db": {
     "host": "db.example.com",
@@ -36,6 +37,7 @@ The postgres_connection secret must be JSON with environment keys. Curly quotes 
     "password": "staging_secret"
   }
 }
+```
 
 ## Core Function: connect_to_postgres()
 
@@ -68,6 +70,7 @@ Error before query | Not set
 ## Usage Example
 Set up the required globals, then call the function:
 
+```python
 secrets = {
   "myapp_postgres_connection": '{"production_db": {"host": "localhost", "port": 5432, "user_name": "dev", "password": "dev"}}'
 }
@@ -86,6 +89,7 @@ outputs = Outputs()
 
 connect_to_postgres()
 print(outputs.result)  # "1573"
+```
 
 ## Notes & Gotchas
 - SQL injection risk: inputs.query is executed directly. Never pass user input without sanitizing.
