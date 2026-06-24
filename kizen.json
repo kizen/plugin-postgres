@@ -1,0 +1,18 @@
+{
+  "name": "Postgres Plugin",
+  "version": "1.0.0",
+  "published": true,
+  "release_branch": ["main"],
+  "api_name": "plugin_postgres",
+  "external_link": "",
+  "description": "Connect to an external Postgres database to power automations with real-time data lookups.",
+  "entry": "src/",
+  "engine": "1.0.0",
+  "release_notes_directory": "releaseNotes/",
+  "release_environments": ["staging"],
+  "config_template": {},
+  "base_config": {
+    "secrets": ["postgres_connection"]
+  },
+  "developer_business_id": {"staging": "0fbf2bd5-f7c4-4bb1-a354-6d3d79120a41"}
+}
