@@ -40,6 +40,7 @@
       "name": "result",
       "label": "Result",
       "data_type": "string",
+      "required": true,
       "script_alias": "result"
     }
   ]
