@@ -32,7 +32,7 @@
       "name": "connection_secret_tag",
       "label": "Connection Secret Tag",
       "data_type": "string",
-      "required": true,
+      "required": false,
       "script_alias": "connection_secret_tag"
     }
     ],
