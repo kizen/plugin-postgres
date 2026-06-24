@@ -24,8 +24,9 @@
       "label": "Return Single Value",
       "data_type": "boolean",
       "required": true,
-      "script_alias": "result_single_value",
+      "script_alias": "return_single_value",
       "default": true
+    }
     },
     {
       "name": "connection_secret_tag",
