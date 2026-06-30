@@ -1,0 +1,48 @@
+{
+  "name": "Send Data",
+  "action_description": "Connects to Postgres and executes a query to send data",
+  "plugin_description": "Postgres connector",
+  "action_type": "postgres_send_data",
+  "runtime": "python 3.12",
+  "secrets": ["postgres_connection"],
+  "inputs": [
+    {
+      "name": "database",
+      "label": "Database",
+      "data_type": "string",
+      "required": true,
+      "script_alias": "database"
+    },
+    {
+      "name": "query",
+      "label": "Query",
+      "data_type": "string",
+      "required": true,
+      "script_alias": "query"
+    },
+    {
+      "name": "return_single_value",
+      "label": "Return Single Value",
+      "data_type": "boolean",
+      "required": true,
+      "script_alias": "return_single_value",
+      "default": true
+    },
+    {
+      "name": "connection_secret_tag",
+      "label": "Connection Secret Tag",
+      "data_type": "string",
+      "required": false,
+      "script_alias": "connection_secret_tag"
+    }
+  ],
+  "outputs": [
+    {
+      "name": "result",
+      "label": "Result",
+      "data_type": "string",
+      "required": true,
+      "script_alias": "result"
+    }
+  ]
+}

@@ -1,8 +1,8 @@
 {
-  "name": "Run Query",
-  "action_description": "Connects to Postgres and executes a query",
+  "name": "Get Data",
+  "action_description": "Connects to Postgres and executes a query to get data",
   "plugin_description": "Postgres connector",
-  "action_type": "postgres_query",
+  "action_type": "postgres_get_data",
   "runtime": "python 3.12",
   "secrets": ["postgres_connection"],
   "inputs": [
