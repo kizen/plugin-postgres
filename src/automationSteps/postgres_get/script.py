@@ -10,7 +10,16 @@ def connect_to_postgres():
     POSTGRES_CONNECTION_RAW = secrets[secret_connection]
 
     # Replace curly quotes with straight quotes
-    cleaned_json = POSTGRES_CONNECTION_RAW.replace('\u201c', '"').replace('\u201d', '"')
+    SMART_QUOTE_MAP = str.maketrans({
+        '\u201c': '"',  # “
+        '\u201d': '"',  # ”
+        '\u2018': "'",  # ‘
+        '\u2019': "'",  # ’
+        '\u201b': "'",  # ‛ single high-reversed-9
+        '\u201e': '"',  # „ double low-9
+        '\u201f': '"',  # ‟ double high-reversed-9
+    })
+    cleaned_json = POSTGRES_CONNECTION_RAW.translate(SMART_QUOTE_MAP)
     POSTGRES_CONNECTION = json.loads(cleaned_json)
 
     # Now actually use it - pick which env you want
