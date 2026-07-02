@@ -1,8 +1,8 @@
 {
-  "name": "Send Data",
-  "action_description": "Connects to Postgres and executes a query to send data",
+  "name": "Read Data",
+  "action_description": "Connects to Postgres and executes a query to read data",
   "plugin_description": "Postgres connector",
-  "action_type": "postgres_send_data",
+  "action_type": "postgres_read_data",
   "runtime": "python 3.12",
   "secrets": ["postgres_connection"],
   "inputs": [
