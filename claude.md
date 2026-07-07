@@ -18,6 +18,7 @@
 - **No SQL guardrail**: Intentionally allows `INSERT`, `UPDATE`, `DELETE`, etc. Use with caution..
 - **Same secret/env handling** as `postgres_read`
 - **Single value mode** also supported for write queries that return a value, e.g. `INSERT ... RETURNING id`
+- **Result status**: Sets `outputs.result_status` alongside `outputs.result`. For INSERT/UPDATE/DELETE (no `RETURNING`), it's the PostgreSQL command tag from `cursor.statusmessage` (e.g. `"INSERT 0 1"`). For queries with a result set, it's a fixed descriptive string: `"No rows returned"`, `"Single value returned"`, or `"Multiple values returned"`.
 
 ## Dependencies
 
@@ -34,7 +35,7 @@ The script expects these runtime objects to be defined:
 | inputs.database              | str    | Target database name to connect to                                                                                                                      |
 | inputs.query                 | str    | SQL query string to execute                                                                                                                             |
 | inputs.return_single_value   | bool   | If `True`, expects exactly 1 row + 1 column and returns that value. If `False`, returns full result set. Raises `ValueError` if expectation not met     |
-| outputs                      | object | Has `.log()` method and `.result` attribute for output                                                                                                  |
+| outputs                      | object | Has `.log()` method and `.result` attribute for output. `postgres_write` also sets `.result_status`                                                     |
 
 ### Secrets JSON Format
 
@@ -102,6 +103,15 @@ All activity is sent to `outputs.log()`. Final data is written to `outputs.resul
 | Zero rows             | `False`               | `""`                                                       |
 | Zero rows             | `True`                | Raises `ValueError`                                        |
 | Error before query    | N/A                   | Not set                                                    |
+
+`postgres_write` additionally sets `outputs.result_status`:
+
+| Scenario                              | `outputs.result_status` value                          |
+| -------------------------------------- | ------------------------------------------------------- |
+| INSERT/UPDATE/DELETE (no `RETURNING`) | `cursor.statusmessage`, e.g. `"INSERT 0 1"`             |
+| Zero rows                              | `"No rows returned"`                                    |
+| Single value returned                  | `"Single value returned"`                                |
+| Multiple rows/columns returned         | `"Multiple values returned"`                             |
 
 ## Notes & Gotchas
 
