@@ -30,6 +30,11 @@ def connect_to_postgres():
     else:
       # If no connection secret tag is provided, POSTGRES_CONNECTION isn't nested
       conn_data = POSTGRES_CONNECTION
+    
+    REQUIRED_KEYS = ('host', 'port', 'user_name', 'password')
+    missing_keys = [key for key in REQUIRED_KEYS if key not in conn_data]
+    if missing_keys:
+        raise ValueError(f"PostgreSQL connection secret is missing required key(s): {', '.join(missing_keys)}")
 
     POSTGRES_HOST = conn_data['host']
     POSTGRES_PORT = conn_data['port']
