@@ -43,6 +43,13 @@
       "data_type": "string",
       "required": true,
       "script_alias": "result"
+    },
+    {
+      "name": "result_status",
+      "label": "Result Status",
+      "data_type": "string",
+      "required": true,
+      "script_alias": "result_status"
     }
   ]
 }

@@ -54,27 +54,31 @@ def connect_to_postgres():
             with connection.cursor() as cursor:
                 cursor.execute(INPUT_QUERY)
 
-                # INSERT/UPDATE/DELETE
                 if cursor.description is None: # True for INSERT/UPDATE/DELETE
                     connection.commit()
                     outputs.log(f"Rows affected: {cursor.rowcount}")
+                    outputs.log(f"cursor.statusmessage: {cursor.statusmessage}")
                     outputs.result = str(cursor.rowcount)
+                    outputs.result_status = cursor.statusmessage
                 else: # SELECT query
                     rows = cursor.fetchall()
 
                     if not rows:
                         outputs.log("Query returned no rows")
                         outputs.result = ""
+                        outputs.result_status = "No rows returned"
                     elif inputs.return_single_value:
                         if len(rows) == 1 and len(rows[0]) == 1:
                             single_value = next(iter(rows[0].values()))
                             outputs.log(f"Single value result: {single_value}")
                             outputs.result = str(single_value)
+                            outputs.result_status = "Single value returned"
                         else:
                             raise ValueError("Expected a single value result, but the query returned multiple rows or columns.")
                     else:
                         outputs.log(f"Multiple values/rows returned: {len(rows)} rows")
                         outputs.result = str(rows)
+                        outputs.result_status = "Multiple values returned"
 
     except psycopg.Error as e:
         raise ValueError(f"Error while using PostgreSQL connection: {e}")
