@@ -1,6 +1,24 @@
 # Postgres Query Runner
 
-This module connects to a Postgres database using psycopg and executes a user-provided SQL query. It pulls connection credentials from a secrets store and handles single-value vs multi-row results.
+## Files
+
+### 1. `postgres_read`
+**Purpose**: Read-only queries against Snowflake. Returns query results as strings.
+
+**Key Features**
+- **Read-only guardrail**: Regex check blocks `INSERT`, `UPDATE`, `DELETE`, `DROP`, `ALTER`, `TRUNCATE`, `CREATE`, `GRANT`, `REVOKE`, `COPY`, `CALL`, `DO`. Only `SELECT` queries should pass.
+- **Smart quote normalization**: Converts curly quotes `“”‘’` to straight quotes before `json.loads()` to handle copy-paste from docs.
+- **Multi-env support**: Reads `MYSQL_CONNECTION` secret. If `inputs.connection_secret_tag` is set, uses that nested key. Otherwise treats the secret as flat.
+- **Single value mode**: Set `inputs.return_single_value = True` to extract one cell. Throws if query returns >1 row or >1 column.
+
+### 2. `postgres_write`  
+**Purpose**: Write operations against Snowflake. Returns stats + results.
+
+**Key Features**
+- **No SQL guardrail**: Intentionally allows `INSERT`, `UPDATE`, `DELETE`, etc. Use with caution..
+- **Same secret/env handling** as `postgres_read`
+- **Single value mode** also supported for write queries that return a value, e.g. `INSERT ... RETURNING id`
+- **Result status**: Sets `outputs.result_status` alongside `outputs.result`. For INSERT/UPDATE/DELETE (no `RETURNING`), it's the PostgreSQL command tag from `cursor.statusmessage` (e.g. `"INSERT 0 1"`). For queries with a result set, it's a fixed descriptive string: `"No rows returned"`, `"Single value returned"`, or `"Multiple values returned"`.
 
 ## Dependencies
 
@@ -17,7 +35,7 @@ The script expects these runtime objects to be defined:
 | inputs.database              | str    | Target database name to connect to                                                                                                                      |
 | inputs.query                 | str    | SQL query string to execute                                                                                                                             |
 | inputs.return_single_value   | bool   | If `True`, expects exactly 1 row + 1 column and returns that value. If `False`, returns full result set. Raises `ValueError` if expectation not met     |
-| outputs                      | object | Has `.log()` method and `.result` attribute for output                                                                                                  |
+| outputs                      | object | Has `.log()` method and `.result` attribute for output. `postgres_write` also sets `.result_status`                                                     |
 
 ### Secrets JSON Format
 
@@ -85,6 +103,15 @@ All activity is sent to `outputs.log()`. Final data is written to `outputs.resul
 | Zero rows             | `False`               | `""`                                                       |
 | Zero rows             | `True`                | Raises `ValueError`                                        |
 | Error before query    | N/A                   | Not set                                                    |
+
+`postgres_write` additionally sets `outputs.result_status`:
+
+| Scenario                              | `outputs.result_status` value                          |
+| -------------------------------------- | ------------------------------------------------------- |
+| INSERT/UPDATE/DELETE (no `RETURNING`) | `cursor.statusmessage`, e.g. `"INSERT 0 1"`             |
+| Zero rows                              | `"No rows returned"`                                    |
+| Single value returned                  | `"Single value returned"`                                |
+| Multiple rows/columns returned         | `"Multiple values returned"`                             |
 
 ## Notes & Gotchas
 

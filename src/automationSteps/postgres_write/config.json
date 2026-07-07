@@ -1,8 +1,8 @@
 {
-  "name": "Run Query",
-  "action_description": "Connects to Postgres and executes a query",
+  "name": "Write Data",
+  "action_description": "Connects to Postgres and executes a query to write data",
   "plugin_description": "Postgres connector",
-  "action_type": "postgres_query",
+  "action_type": "postgres_write_data",
   "runtime": "python 3.12",
   "secrets": ["postgres_connection"],
   "inputs": [
@@ -43,6 +43,13 @@
       "data_type": "string",
       "required": true,
       "script_alias": "result"
+    },
+    {
+      "name": "result_status",
+      "label": "Result Status",
+      "data_type": "string",
+      "required": true,
+      "script_alias": "result_status"
     }
   ]
 }

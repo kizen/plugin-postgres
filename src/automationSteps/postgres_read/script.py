@@ -1,5 +1,6 @@
 import json
 import psycopg
+import re
 from psycopg.rows import dict_row
 
 def connect_to_postgres():
@@ -9,7 +10,16 @@ def connect_to_postgres():
     POSTGRES_CONNECTION_RAW = secrets[secret_connection]
 
     # Replace curly quotes with straight quotes
-    cleaned_json = POSTGRES_CONNECTION_RAW.replace('\u201c', '"').replace('\u201d', '"')
+    SMART_QUOTE_MAP = str.maketrans({
+        '\u201c': '"',  # “
+        '\u201d': '"',  # ”
+        '\u2018': "'",  # ‘
+        '\u2019': "'",  # ’
+        '\u201b': "'",  # ‛ single high-reversed-9
+        '\u201e': '"',  # „ double low-9
+        '\u201f': '"',  # ‟ double high-reversed-9
+    })
+    cleaned_json = POSTGRES_CONNECTION_RAW.translate(SMART_QUOTE_MAP)
     POSTGRES_CONNECTION = json.loads(cleaned_json)
 
     # Now actually use it - pick which env you want
@@ -22,6 +32,11 @@ def connect_to_postgres():
       # If no connection secret tag is provided, POSTGRES_CONNECTION isn't nested
       conn_data = POSTGRES_CONNECTION
 
+    REQUIRED_KEYS = ('host', 'port', 'user_name', 'password')
+    missing_keys = [key for key in REQUIRED_KEYS if key not in conn_data]
+    if missing_keys:
+        raise ValueError(f"PostgreSQL connection secret is missing required key(s): {', '.join(missing_keys)}")
+
     POSTGRES_HOST = conn_data['host']
     POSTGRES_PORT = conn_data['port']
     POSTGRES_PASSWORD = conn_data['password']
@@ -29,6 +44,11 @@ def connect_to_postgres():
 
     INPUT_DATABASE = inputs.database
     INPUT_QUERY = inputs.query
+
+    # Basic SQL guardrail - reject obvious write operations before hitting DB
+    write_keywords = r'^\s*(INSERT|UPDATE|DELETE|DROP|ALTER|TRUNCATE|CREATE|GRANT|REVOKE|COPY|CALL|DO)\b'
+    if re.match(write_keywords, INPUT_QUERY, re.IGNORECASE):
+        raise ValueError("Write operations are not allowed. Only SELECT queries permitted.")
 
     outputs.log(f"Using host: {POSTGRES_HOST} and port: {POSTGRES_PORT}")
 
@@ -43,6 +63,10 @@ def connect_to_postgres():
             connect_timeout=10
         ) as connection:
             with connection.cursor() as cursor:
+                # Force read-only at the session level
+                cursor.execute("SET SESSION CHARACTERISTICS AS TRANSACTION READ ONLY")
+                cursor.execute("SET default_transaction_read_only = on")
+
                 cursor.execute(INPUT_QUERY)
                 rows = cursor.fetchall()
 
