@@ -1,4 +1,5 @@
 {
+  "api_name": "postgresread",
   "name": "Read Data",
   "action_description": "Connects to Postgres and executes a query to read data",
   "plugin_description": "Postgres connector",
