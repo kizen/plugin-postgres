@@ -1,6 +1,6 @@
 {
   "name": "Postgres Connection",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "published": true,
   "release_branch": ["main"],
   "api_name": "plugin_postgres",
@@ -9,7 +9,7 @@
   "entry": "src/",
   "engine": "1.0.0",
   "release_notes_directory": "releaseNotes/",
-  "release_environments": ["staging"],
+  "release_environments": ["prod", "dev"],
   "config_template": {},
   "base_config": {
     "secrets": ["postgres_connection"]
