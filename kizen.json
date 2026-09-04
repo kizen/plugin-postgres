@@ -1,6 +1,6 @@
 {
   "name": "Postgres Connection",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "published": true,
   "release_branches": ["main"],
   "api_name": "plugin_postgres",

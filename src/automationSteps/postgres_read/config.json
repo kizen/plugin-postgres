@@ -26,8 +26,7 @@
       "label": "Return Single Value",
       "data_type": "boolean",
       "required": true,
-      "script_alias": "return_single_value",
-      "default": true
+      "script_alias": "return_single_value"
     },
     {
       "name": "connection_secret_tag",

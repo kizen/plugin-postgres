@@ -24,7 +24,7 @@ def connect_to_postgres():
 
     # Now actually use it - pick which env you want
     conn_data = {}
-    if inputs.connection_secret_tag:
+    if getattr(inputs, "connection_secret_tag", None):
       if inputs.connection_secret_tag not in POSTGRES_CONNECTION:
           raise ValueError(f"Connection secret tag {inputs.connection_secret_tag} not found in POSTGRES_CONNECTION")
       conn_data = POSTGRES_CONNECTION[inputs.connection_secret_tag]
