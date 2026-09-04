@@ -26,15 +26,15 @@
       "label": "Return Single Value",
       "data_type": "boolean",
       "required": true,
-      "script_alias": "return_single_value",
-      "default": true
+      "script_alias": "return_single_value"
     },
     {
       "name": "connection_secret_tag",
       "label": "Connection Secret Tag",
       "data_type": "string",
       "required": false,
-      "script_alias": "connection_secret_tag"
+      "script_alias": "connection_secret_tag",
+      "input_source": "static_value"
     }
   ],
   "outputs": [
