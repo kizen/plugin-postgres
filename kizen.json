@@ -1,11 +1,12 @@
 {
   "name": "Postgres Connection",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "published": true,
   "release_branches": ["main"],
   "api_name": "plugin_postgres",
   "external_link": "",
   "description": "Connect to an external Postgres database to power Agentic Workflows with real-time data lookups.",
+  "categories": ["databases_data_platforms"],
   "agentic_description": "Connect to an external Postgres database to power Agentic Workflows with real-time data lookups.",
   "entry": "src/",
   "engine": "1.0.0",
